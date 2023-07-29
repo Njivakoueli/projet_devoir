@@ -10,17 +10,10 @@
 
 			<?php
 			// Connexion à la base de données
-			$serveur = "localhost";
-			$utilisateur = "root";
-			$mdp = "";
-			$base_de_donnees = "devoir";
-			$connexion = mysqli_connect($serveur, $utilisateur, $mdp, $base_de_donnees);
-
-			// Vérification de la connexion
-
-			if (!$connexion) {
-				die("La connexion a échoué: " . mysqli_connect_error());
-			}
+		
+			include ('host/connect.php');
+			?>
+			<?php
 
 			// Récupération de l'ID de l'étudiant à supprimer à partir de la requête GET
 			$id_etudiant = $_GET["id"];

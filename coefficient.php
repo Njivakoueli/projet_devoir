@@ -12,8 +12,8 @@
 	<table>
 
 			<tr>
-				<td><a href="note_matiere.php">Saisir les notes</a></td>
-				<td><a href="bulletin.php">Créer un bulletin</a></td>
+				<td><a href="index.php">Accueil</a></br></td>
+				
 			</tr>
 	</table>
     <div>
@@ -42,5 +42,5 @@
 
 
   </body>
-  <?php include("footer.php") ?>
+  
 </html>

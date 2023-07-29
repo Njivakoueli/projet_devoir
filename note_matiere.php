@@ -9,8 +9,7 @@
 		<h1>Formulaire de saisie des notes</h1>
 		<table>
 			<tr>
-				<td><a href="formulaire_eleve.php">Inscrire un etudiant</a></td>
-				<td><a href="bulletin.php">Créer un bulletin</a></td>
+				<td><a href="index.php">Accueil</a></td>
 			</tr>
 		</table>
 		
@@ -26,7 +25,7 @@
 
 
 			<label for="note">Note:</label>
-			<input type="number" name="note" id="note" min="0" max="20" required />
+			<input type="text" name="note" id="note" min="0" max="20" required />
 
 			<input type="submit" value="Enregistrer"/>
 

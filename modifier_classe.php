@@ -7,28 +7,24 @@
 	
 	<body>
 		<h1>GESTION DE BULLETIN DES NOTES</h1>
+	<a href="index.php">Accueil</a></br>
+				
+			
+
 		<?php
 		
-		// Connexion à la base de données
-		$serveur = "localhost";
-		$utilisateur = "root";
-		$mdp = "";
-		$base_de_donnees = "devoir";
-		$connexion = mysqli_connect($serveur, $utilisateur, $mdp, $base_de_donnees);
-
-		// Vérification de la connexion
-
-		if (!$connexion) {
-			die("La connexion a échoué: " . mysqli_connect_error());
-		}
-
+		 // Connexion à la base de données
+		
+		include ('host/connect.php');
+		?>
+		<?php
 		// Vérification si l'ID de la classe est présent dans l'URL
 		if (isset($_GET['id'])) {
 			$id_classe = $_GET['id'];
 
 			// Vérification si le formulaire de modification a été soumis
 			if ($_SERVER["REQUEST_METHOD"] == "POST") {
-				$nom = $_POST["nom_classe"];
+				$nom = $_POST["nom"]; 
 				
 				// Récupération des anciennes valeurs
 				$sql_select_old = "SELECT * FROM classes WHERE id='$id_classe'";
@@ -38,12 +34,12 @@
 				// Modification des valeurs dans la table classes
 				$sql = "UPDATE classes SET nom_classe='$nom' WHERE id='$id_classe'";
 				if (mysqli_query($connexion, $sql)) {
-					echo "Les informations de l'étudiant ont été modifiées avec succès.<br><br>"; //echo Die;
+					echo "Les informations de l'étudiant ont été modifiées avec succès.<br><br>";
 
 				// Affichage des anciennes et nouvelles valeurs côte à côte 
 				echo '<table>'; 
 				echo '<tr><th>Champ</th><th>Anciennes valeurs</th><th>Nouvelles valeurs</th></tr>'; 
-				echo '<tr><td>Nom : </td><td>' . $classe_old['nom_classe'] . '</td><td>' . $nom . '</td></tr>'; 
+				echo '<tr><td>Nom : </td><td>' . $classe_old["nom_classe"] . '</td><td>' . $nom . '</td></tr>'; 
 				echo '</table>';
 				 } 
 				 else { 
@@ -73,10 +69,7 @@
 			echo "L'ID de la classe n'est pas spécifié.";
 		}
 			echo "<br>";
-				echo "<a href='formulaire_eleve.php'>"."Inscrire un etudiant"."</a>"."\n";
-				echo "<a href='note_matiere.php'>"."Saisir les notes"."</a>"."\n";
-				echo "<a href='bulletin.php'>"."Créer un bulletin"."</a>";
-			
+				
 
 
 	// Fermeture de la connexion

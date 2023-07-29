@@ -12,12 +12,12 @@
 	<table>
 
 			<tr>
-				<td><a href="note_matiere.php">Saisir les notes</a></td>
-				<td><a href="bulletin.php">Créer un bulletin</a></td>
+				<td><a href="index.php">Accueil</a></br></a></td>
+				
 			</tr>
 	</table>
     <div>
-      <form action="insertion\insertion_eleve.php" method="post">
+      <form action="insertion_eleve.php" method="post">
    
         <label for="id_eleve">ID de l' etudiant:</label>
         <input type="text" id="id_etudiant" name="id_etudiant" placeholder="Entrez l'ID de l'etudiant de la forme et_1 ou et_2 ..." required>
@@ -46,5 +46,5 @@
 
 
   </body>
-  <?php include("footer.php") ?>
+
 </html>

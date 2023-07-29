@@ -8,10 +8,11 @@
 
 
     <h1>creation du bulletin</h1>
+	
 	<table>
 			<tr>
-				<td><a href="formulaire_eleve.php">Inscrire un etudiant</a></td>
-				<td><a href="note_matiere.php">Saisir les notes</a></td>
+				<td><a href="index.php">Accueil</a></br></td>
+				
 			</tr>
 	</table>
 

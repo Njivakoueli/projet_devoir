@@ -9,22 +9,15 @@
 </head>
 <body>
 
+
 		<?php echo"<h1>"."GESTION DE BULLETIN DES NOTES"."</h1>";?>
+		<a href="index.php">Accueil</a></br>
 		<?php
 		  // Connexion à la base de données
-		  $serveur = "localhost";
-		  $utilisateur = "root";
-		  $mdp = "";
-		  $base_de_donnees = "devoir";
-
-		  $connexion = mysqli_connect($serveur, $utilisateur, $mdp, $base_de_donnees);
-
-
-		  // Vérification de la connexion
-		  if (!$connexion) {
-			die("La connexion a échoué: " . mysqli_connect_error());
-		  }
-
+		
+		include ('host/connect.php');
+		?>
+		<?php
 		  // Récupération des valeurs soumises du formulaire
 			  $id_etudiant = $_POST["id_etudiant"];
 			  $nom = $_POST["nom"];
@@ -93,10 +86,7 @@
 
 
 			echo "<br>";
-				echo "<a href='formulaire_eleve.php'>"."Inscrire un etudiant"."</a>"."\n";
-				echo "<a href='note_matiere.php'>"."Saisir les notes"."</a>"."\n";
-				echo "<a href='bulletin.php'>"."Créer un bulletin"."</a>";
-			
+				
 			
 		  // Fermeture de la connexion
 		  mysqli_close($connexion);
