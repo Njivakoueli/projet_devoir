@@ -2,11 +2,12 @@
 <html>
 	<head>
 	<title>bulletin</title>
-	<link rel="stylesheet" media="screen" type="text/css" title="Design" href="design/bulletinhafa1.css" />
+	<link rel="stylesheet" media="screen" type="text/css" title="Design" href="design/bulletin1.css" />
 	
 	</head>
 
 	<body>
+	
 		<?php
 			// Étape 1 : Connexion à la base de données (à adapter avec vos informations)
 			$servername = "localhost";
@@ -20,6 +21,7 @@
 						}
 			//poste variable classe
 			$class_id = $_POST['id_classe'];
+			echo "<h1>"."Bulletin des notes de la classe : "."$class_id"."</h1>";
 			// Étape 2 : Récupérer les données des étudiants, matières, professeurs et notes
 			$sql = "SELECT e.id, e.nom, e.prenom,e.adresse,e.date_naissance, c.nom_classe, m.nom_matiere, n.note, co.coeff, p.nom AS nom_professeur
 
@@ -70,99 +72,100 @@
 						}
 				}
 			   
-		// Étape 3 : Calculer les moyennes des étudiants et déterminer leur rang
-$sqlMoyennes = "SELECT e.id, AVG(n.note) AS moyenne
-                FROM etudiants e
-                INNER JOIN notes n ON e.id = n.etudiant_id
-                INNER JOIN coefficients co ON co.matiere_id = n.matiere_id
-                INNER JOIN classes c ON c.id = co.classe_id
-                WHERE c.id = '$class_id'
-                GROUP BY e.id
-                ORDER BY moyenne DESC";
+						// Étape 3 : Calculer les moyennes des étudiants et déterminer leur rang
+						$sqlMoyennes = "SELECT e.id, AVG(n.note) AS moyenne
+										FROM etudiants e
+										INNER JOIN notes n ON e.id = n.etudiant_id
+										INNER JOIN coefficients co ON co.matiere_id = n.matiere_id
+										INNER JOIN classes c ON c.id = co.classe_id
+										WHERE c.id = '$class_id'
+										GROUP BY e.id
+										ORDER BY moyenne DESC";
 
-$resultMoyennes = mysqli_query($conn, $sqlMoyennes);
-$rang = 1;
+						$resultMoyennes = mysqli_query($conn, $sqlMoyennes);
+						$rang = 1;
 
-while ($rowMoyenne = mysqli_fetch_assoc($resultMoyennes)) {
-    $studentId = $rowMoyenne['id'];
-    $moyenne = $rowMoyenne['moyenne'];
+						while ($rowMoyenne = mysqli_fetch_assoc($resultMoyennes)) {
+							$studentId = $rowMoyenne['id'];
+							$moyenne = $rowMoyenne['moyenne'];
 
-    // Rechercher l'étudiant correspondant dans le tableau $etudiants
-    if (array_key_exists($studentId, $etudiants)) {
-        $etudiants[$studentId]['moyenne'] = $moyenne;
-        $etudiants[$studentId]['rang'] = $rang;
+							// Rechercher l'étudiant correspondant dans le tableau $etudiants
+							if (array_key_exists($studentId, $etudiants)) {
+								$etudiants[$studentId]['moyenne'] = $moyenne;
+								$etudiants[$studentId]['rang'] = $rang;
 
-        $rang++;
-    }
-}
-// Étape 4 : Afficher les bulletins de notes pour chaque étudiant
-foreach ($etudiants as $etudiant) {
-    echo "<h2>Bulletin de notes - Étudiant : " . $etudiant['name'] . "</h2>";
-    echo "<h4>Classe : " . $etudiant['class'] . "</h4>";
-    echo "<h4>Adresse : " . $etudiant['address'] . "</h4>";
-    echo "<h4>Date de naissance : " . $etudiant['date_of_birth'] . "</h4>";
+								$rang++;
+							}
+						}
+						// Étape 4 : Afficher les bulletins de notes pour chaque étudiant
+						foreach ($etudiants as $etudiant) {
+							echo "<h2>Bulletin de notes </h2>";
+							echo "Prenom(s) et nom : ". $etudiant['name']."</br>";
+							echo "Classe : " . $etudiant['class']."</br>";
+							echo "Adresse : " . $etudiant['address']."</br>" ;
+							echo "Date de naissance : " . $etudiant['date_of_birth']."</br>"."</br>";
 
-    echo "<table>
-        <thead>
-            <tr>
-                <th>Matière</th>
-                <th>Note</th>
-                <th>Coefficient</th>
-                <th>Professeur</th>
-            </tr>
-        </thead>
-        <tbody>";
-    $totalNotes = 0;
-    $totalCoeffs = 0;
-    $totalEtudiants = count($etudiants);
-    
-    foreach ($etudiant['matieres'] as $matiere) {
-        echo "<tr>
-				<td>" . $matiere['matiere'] . "</td>
-				<td>" . $matiere['note'] . "</td>
-				<td>" . $matiere['coeff'] . "</td>
-				<td>" . $matiere['professor'] . "</td>
-			 </tr>";
+							echo "<table>
+								<thead>
+									<tr>
+										<th>Matière</th>
+										<th>Note</th>
+										<th>Coefficient</th>
+										<th>Professeur</th>
+									</tr>
+								</thead>
+								<tbody>";
+							$totalNotes = 0;
+							$totalCoeffs = 0;
+							$totalEtudiants = count($etudiants);
+							
+							foreach ($etudiant['matieres'] as $matiere) {
+								echo "<tr>
+										<td>" . $matiere['matiere'] . "</td>
+										<td>" . $matiere['note'] . "</td>
+										<td>" . $matiere['coeff'] . "</td>
+										<td>" . $matiere['professor'] . "</td>
+									 </tr>";
 
-        // Calculer la note avec coefficient pour chaque matière
-        $totalNotes += ($matiere['note'] * $matiere['coeff']);
-        $totalCoeffs += $matiere['coeff'];
-    }
-    
-    echo "</tbody>
-    </table>";
+						// Calculer la note avec coefficient pour chaque matière
+						$totalNotes += ($matiere['note'] * $matiere['coeff']);
+						$totalCoeffs += $matiere['coeff'];
+					}
+					
+					echo "</tbody>
+					</table>";
 
-    // Calculer la moyenne générale de l'étudiant
-    $moyenneGenerale = ($totalNotes / $totalCoeffs);
-    echo "<h3>Moyenne générale : " . round($moyenneGenerale, 2) . "</h3>";
-    
-    // Afficher le rang de l'étudiant
-    echo "<h3>Rang : " . $etudiant['rang'] . "/" 
+					// Calculer la moyenne générale de l'étudiant
+					$moyenneGenerale = ($totalNotes / $totalCoeffs);
+					echo "<h3>Moyenne générale : " . round($moyenneGenerale, 2) . "</h3>";
+					
+					// Afficher le rang de l'étudiant
+					echo "<h3>Rang : " . $etudiant['rang'] . "/" 
 
-. $totalEtudiants ."</h3>";
-    
-    // Ajouter une appréciation selon la moyenne
-    $appreciation = '';
-    
-    if ($moyenneGenerale >= 16) {
-        $appreciation = 'Très bien';
-    } elseif ($moyenneGenerale >= 14) {
-        $appreciation = 'Bien';
-    } elseif ($moyenneGenerale >= 12) {
-        $appreciation = 'Assez bien';
-    } elseif ($moyenneGenerale >= 10) {
-        $appreciation = 'Passable';
-    } elseif ($moyenneGenerale >= 8) {
-        $appreciation = 'Insuffisant';
-    } else {
-        $appreciation = 'Faible';
-    }
-    
-    echo "<p>Appréciation : " . $appreciation 
+				. $totalEtudiants ."</h3>";
+					
+					// Ajouter une appréciation selon la moyenne
+					$appreciation = '';
+					
+					if ($moyenneGenerale >= 16) {
+						$appreciation = 'Très bien';
+					} elseif ($moyenneGenerale >= 14) {
+						$appreciation = 'Bien';
+					} elseif ($moyenneGenerale >= 12) {
+						$appreciation = 'Assez bien';
+					} elseif ($moyenneGenerale >= 10) {
+						$appreciation = 'Passable';
+					} elseif ($moyenneGenerale >= 8) {
+						$appreciation = 'Insuffisant';
+					} else {
+						$appreciation = 'Faible';
+					}
+					
+					echo "<p>Appréciation : " . $appreciation 
 
-. "</p>";
-    echo "<p>"." ********************************************************************************************************************************** "."</p>";
-}
+				. "</p>";
+					echo "<p>"." ********************************************************************************************************************************** "."</p>";
+				}
 
 // Étape 5 : Fermer la connexion à la base de données
 mysqli_close($conn);
